@@ -1,0 +1,17 @@
+Backend =>
+Node Js
+
+Database =>
+MongoDB
+
+Packages/Modules =>
+Express Js (Framework based on node Js);
+Mongoose (Object Data Modeling[ODM] library);
+EJS (Embedded JavaScript Template Engine);
+Multer (Image Upload);
+Express Session (Starting Session Messages);
+Dotenv (Environment Variables);
+Nodemon (Monitoring Server);
+
+Frontend library =>
+Bootstrap 5(Designing); Fontawesome(Icons);
