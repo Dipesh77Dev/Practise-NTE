@@ -1,0 +1,30 @@
+<%- include('layout/header') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class = "card shadow">
+                <div class="card-header bg-success">
+                    <h3 class="text-light"> Edit Product (<%= product.prodName %>)</h3>
+                </div>
+            <div class="card-body p-4">
+                <form action = "/update2/<%=product._id %>" method="post" id="add-form">
+                <div class="mb-3">
+                    <label for = "name"> Name </label>
+                    <input type="text" name="prodName" class="form-control form-control-lg" placeholder="PRODUCT NAME" value="<%= product.catName %>" required />
+                </div>
+                <div class="mb-3">
+                    <label for = "description"> Description </label>
+                    <input type="description" name="catDescription" class="form-control form-control-lg" placeholder="CATEGORY DESCRIPTION" value="<%= category.catDescription %>"email %>" required />
+                </div>
+                <div class="mb-3 d-grid">
+                    <input type="submit" name="submit" value="Update Category" class="btn btn-success btn-lg" />
+                </div> 
+            </form>
+            </div>
+        </div> 
+    </div>
+</div>
+</div>
+
+<%- include('layout/footer') %>

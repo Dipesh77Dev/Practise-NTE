@@ -44,6 +44,8 @@ app.get('/welcome', (req, res) => {
 
 // route prefix
 app.use("", require("./routes/userRoutes.js"));
+app.use("", require("./routes/categoryRoutes.js"));
+app.use("", require("./routes/productRoutes.js"));
 
 app.listen(PORT, () => {
     console.log(`Server Started at http://localhost:${PORT}`);

@@ -1,0 +1,31 @@
+<%- include('layout/header') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class = "card shadow">
+                <div class="card-header bg-primary">
+                    <h3 class="text-light"> Add New CATEGORY </h3>
+                </div>
+            <div class="card-body p-4">
+                <form action = "/addCategory" method="post" id="add-form">
+                <div class="mb-3">
+                    <label for = "name"> Name </label>
+                    <input type="text" name="catName" class="form-control form-control-lg" placeholder="CATEGORY NAME" required />
+                </div>
+                <div class="mb-3">
+                    <label for = "description">  Description </label>
+                    <input type="description" name="catDescription" class="form-control form-control-lg" placeholder="CATEGORY DESCRIPTION" required />
+                </div>
+               
+                <div class="mb-3 d-grid">
+                    <input type="submit" name="submit" value="Add Category" class="btn btn-primary btn-lg" />
+                </div> 
+            </form>
+            </div>
+        </div> 
+    </div>
+</div>
+</div>
+
+<%- include('layout/footer') %>

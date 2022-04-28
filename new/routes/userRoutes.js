@@ -6,8 +6,13 @@ router.get("/users", (req, res) => {
     res.send("ALL USERS!!!");
 });
 
+// Getting addUser Form
+router.get("/addUser", (req, res) => {
+    res.render('add_users', { title: 'Add Users' }); // taking variable from ejs file
+});
+
 // insert User 
-router.post("/add", (req, res) => {
+router.post("/addUser", (req, res) => {
     const user = new User({
         name : req.body.name,
         email : req.body.email,
@@ -23,20 +28,20 @@ router.post("/add", (req, res) => {
                 type: 'success',
                 message: 'User added successfully!!!',
             };
-            res.redirect('/');
+            res.redirect('/userList');
         }
     });
 });
 
 // Get User
-router.get("/", (req, res) => {
+router.get("/userList", (req, res) => {
     // res.send("HOME PAGE!!!");
     // res.render('index', { title: 'Home Page' }); 
     User.find().exec((err, users) => {
         if(err){
             res.json({ message: err.message });
         } else {
-            res.render('index', { title: 'Home Page' , users: users});
+            res.render('user_list', { title: 'User List Page' , users: users});
         }
     });
 });
@@ -49,7 +54,7 @@ router.get('/editUser/:id', (req, res) => {
             res.redirect('/');
         } else{
             if (user == null){
-                res.redirect('/');
+                res.redirect('/userList');
             } else{
                 res.render('edit_users', { title: "Edit User Page", user: user,});
             }
@@ -74,7 +79,7 @@ router.post('/update/:id', (req, res)=> {
                 type : "success",
                 message : "User Updated Successfully!!!",
             };
-            res.redirect('/');
+            res.redirect('/userList');
         }
     });
 });
@@ -90,13 +95,9 @@ router.get('/deleteUser/:id', (req, res) =>{
                 type : "info",
                 message : "User Deleted Successfully!!!",
             };
-            res.redirect('/');
+            res.redirect('/userList');
         }
     });
-});
-
-router.get("/add", (req, res) => {
-    res.render('add_users', { title: 'Add Users' }); // taking variable from ejs file
 });
 
 module.exports = router;
