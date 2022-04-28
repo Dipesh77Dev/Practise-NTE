@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { ObjectId } = mongoose.Schema.Types;
+// const { ObjectId } = mongoose.Schema.Types;
 const productSchema = new mongoose.Schema({
     prodName : {
         type : String,
@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema({
         type : String,
     },
     category : {
-        type : ObjectId,
+        type : mongoose.Schema.Types.ObjectId, 
         ref : "category",
         required : true,
     },
