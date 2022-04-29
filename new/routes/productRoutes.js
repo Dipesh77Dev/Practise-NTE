@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/product.js');
 
@@ -30,7 +31,14 @@ router.post("/addProduct", (req, res) => {
 
 // Get Product List without pagination & Populate
 router.get("/productList", (req, res) => {
-    Product.find().exec((err, product) => {
+    const {page = 1, limit = 5} = req.query;
+    Product.find()
+    .limit(limit*1).skip((page-1)*limit)
+    .populate({
+        path: 'category',
+        select: ['catName', 'catDescription'],
+    })
+    .exec((err, product) => {
         if(err){
             res.json({ message: err.message });
         } else {
@@ -128,4 +136,45 @@ router.get('/',(req, res) =>{
 });
 
 module.exports = router;
-// module.exports = router();
+
+/*
+router.get("/prodCat", async (req, res) => {
+    try{
+        // pagination
+        const {page = 1, limit = 5} = req.query;
+        const product = await Product.find().limit(limit * 1).skip((page-1) * limit).populate({
+            path: "category",
+            select: [
+                'catName',
+                'catDescription'
+            ],
+        });
+        res.send(product);
+        res.render('prod_cat', { title: 'Product Page by Category' , product: product });
+    }
+    catch(err){
+        res.status(500).send(err)
+    };
+});
+*/
+
+/*
+router.get("/prodCat", (req, res) => {
+    const {page = 1, limit = 5} = req.query;
+    Product.find().limit(limit * 1).skip((page-1) * limit).populate({
+                    path: "category",
+                    select: [
+                        'catName',
+                        'catDescription'
+                    ],
+                }).exec((err, product) => {
+        if(err){
+            res.json({ message: err.message });
+        } else {
+            res.render('prod_cat', { title: 'Product by Category Page' , product: product });
+        }
+    });
+});
+*/
+
+// module.exports = router(); 

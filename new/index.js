@@ -42,6 +42,11 @@ app.get('/welcome', (req, res) => {
     res.send("Hello ALL!!");
 });
 
+// models
+require('./models/users.js');
+require('./models/product.js');
+require('./models/category.js');
+
 // route prefix
 app.use("", require("./routes/userRoutes.js"));
 app.use("", require("./routes/categoryRoutes.js"));
