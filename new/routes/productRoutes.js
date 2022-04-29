@@ -39,9 +39,10 @@ router.get("/productList", (req, res) => {
     });
 });
 
+/*
 // Pagination & Populate
 router.get("/", async (req, res) => {
-    // try{
+    try{
         // pagination
         const {page = 1, limit = 5} = req.query;
         const product = await Product.find().limit(limit * 1).skip((page-1) * limit).populate({
@@ -53,9 +54,9 @@ router.get("/", async (req, res) => {
         }).exec((err, product) => {
             if(err){
                 res.send(product);
-                res.json({ message: err.message });
+                // res.json({ message: err.message });
             } else {
-                res.render('product_list', { title: 'Product List Page' , product: product });
+                res.render('home', { title: 'Home Page' , product: product });
             }
         });
     });;
@@ -67,6 +68,7 @@ router.get("/", async (req, res) => {
     //     res.status(500).send(err)
     // };
 // });
+*/
 
 // Update or edit Product
 router.get('/editProduct/:id', (req, res) => {
@@ -78,7 +80,7 @@ router.get('/editProduct/:id', (req, res) => {
             if (product == null){
                 res.redirect('/productList');
             } else{
-                res.render('edit_product', { title: "Edit Product Page", product: product,});
+                res.render('edit_product', { title: "Edit Product Page", product: product});
             }
         }
     });
@@ -108,7 +110,7 @@ router.post('/update2/:id', (req, res)=> {
 // Delete Product Route
 router.get('/deleteProduct/:id', (req, res) =>{
     let id = req.params.id;
-    Category.findByIdAndRemove(id, (err, result) => {
+    Product.findByIdAndRemove(id, (err, result) => {
         if(err){
             res.json({ message: err.message });
         } else {
@@ -119,6 +121,10 @@ router.get('/deleteProduct/:id', (req, res) =>{
             res.redirect('/productList');
         }
     });
+});
+
+router.get('/',(req, res) =>{
+    res.render('home', {title: 'Home Page'});
 });
 
 module.exports = router;
