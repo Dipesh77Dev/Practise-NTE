@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/product.js');
+const { ObjectId } = require('mongodb'); 
+
 
 // Getting addProduct Form
 router.get("/addProduct", (req, res) => {
@@ -29,11 +31,12 @@ router.post("/addProduct", (req, res) => {
     });
 });
 
-// Get Product List without pagination & Populate
+/*
+// Get Product List with pagination & Populate
 router.get("/productList", (req, res) => {
     const {page = 1, limit = 5} = req.query;
-    Product.find()
-    .limit(limit*1).skip((page-1)*limit)
+    const product = Product.find({ category: req.params.categoryId })
+    .limit(limit * 1).skip((page - 1) * limit)
     .populate({
         path: 'category',
         select: ['catName', 'catDescription'],
@@ -42,41 +45,42 @@ router.get("/productList", (req, res) => {
         if(err){
             res.json({ message: err.message });
         } else {
-            res.render('product_list', { title: 'Product List Page' , product: product });
+            // res.send(product);
+            res.json(product);
+            // res.render('product_list', { title: 'Product List Page' , product : product });
         }
     });
 });
-
-/*
-// Pagination & Populate
-router.get("/", async (req, res) => {
-    try{
-        // pagination
-        const {page = 1, limit = 5} = req.query;
-        const product = await Product.find().limit(limit * 1).skip((page-1) * limit).populate({
-            path: "category",
-            select: [
-                'catName',
-                'catDesc'
-            ],
-        }).exec((err, product) => {
-            if(err){
-                res.send(product);
-                // res.json({ message: err.message });
-            } else {
-                res.render('home', { title: 'Home Page' , product: product });
-            }
-        });
-    });;
-
-        // res.send(product);
-        // res.render('home', { title: 'Home Page' , product: product });
-    // }
-    // catch(err){
-    //     res.status(500).send(err)
-    // };
-// });
 */
+
+router.get("/productList", async(req, res) => {
+    console.log("Dipesh");
+    try{
+    const {page = 1, limit = 5} = req.query;
+    const _id = ObjectId(req.params.categoryId);
+    console.log(_id, req.params.categoryId);
+    const product = await Product.find({ category: _id })
+    .limit(limit * 1).skip((page - 1) * limit)
+    .populate({
+        path: 'category',
+        select: ['catName', 'catDescription'],
+    })
+    .exec((err, product) => {
+        if(err){
+            res.json({ message: err.message });
+        } else {
+            // res.send(product);
+            // res.json(product);
+            console.log('Name is', product);
+            res.render('product_list', { title: 'Product List Page' , product : product });
+        }
+    });
+}
+catch(error){
+    console.log(error);
+}
+});
+
 
 // Update or edit Product
 router.get('/editProduct/:id', (req, res) => {
@@ -178,3 +182,6 @@ router.get("/prodCat", (req, res) => {
 */
 
 // module.exports = router(); 
+
+
+// https://github.com/Automattic/mongoose/issues/7432

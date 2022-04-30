@@ -47,7 +47,7 @@ router.get('/editCategory/:id', (req, res) => {
             if (category == null){
                 res.redirect('/categoryList');
             } else{
-                res.render('edit_category', { title: "Edit Category Page", category: category,});
+                res.render('edit_category', { title: "Edit Category Page", category: category});
             }
         }
     });
