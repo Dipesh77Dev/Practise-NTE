@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/product.js');
-const { ObjectId } = require('mongodb'); 
+// const { ObjectId } = require('mongodb'); 
 
 
 // Getting addProduct Form
@@ -18,17 +18,31 @@ router.post("/addProduct", (req, res) => {
         prodDescription : req.body.prodDescription,
         category : req.body.category,
     });
-    product.save((err) => {
-        if(err){
-            res.json({message : err.message, type: 'danger'});
-        } else {
-            req.session.message = {
-                type: 'success',
-                message: 'Product added successfully!!!',
-            };
-            res.redirect('/productList');
+    // product.save((err) => {
+    //     if(err){
+    //         res.json({message : err.message, type: 'danger'});
+    //     } else {
+    //         req.session.message = {
+    //             type: 'success',
+    //             message: 'Product added successfully!!!',
+    //         };
+    //         res.redirect('/productList');
+    //     }
+    // });
+    product.save(product).then(
+        data => {
+            res.send(data);
+            // req.session.message = {
+            //     type: 'success',
+            //     message: 'Product added successfully!!!',
+            // };
+            // res.redirect('/productsList');
         }
-    });
+    ).catch(
+        err => {
+            res.json({message : err.message, type: 'danger'});
+        }
+    );
 });
 
 /*
@@ -54,43 +68,42 @@ router.get("/productList", (req, res) => {
 */
 
 router.get("/productList", async(req, res) => {
-    console.log("Dipesh");
     try{
     const {page = 1, limit = 5} = req.query;
-    const _id = ObjectId(req.params.categoryId);
-    console.log(_id, req.params.categoryId);
-    const product = await Product.find({ category: _id })
+    const product = await Product.find()
     .limit(limit * 1).skip((page - 1) * limit)
     .populate({
         path: 'category',
         select: ['catName', 'catDescription'],
-    })
-    .exec((err, product) => {
-        if(err){
-            res.json({ message: err.message });
-        } else {
-            // res.send(product);
-            // res.json(product);
-            console.log('Name is', product);
-            res.render('product_list', { title: 'Product List Page' , product : product });
-        }
     });
+    res.render('product_list', { title: 'Product List', "product" : product});
 }
 catch(error){
     console.log(error);
 }
 });
 
+router.get('/productsList', (req, res) => {
+    Product.find().then(
+        data => {
+            res.render('product_list', { title: 'All products List', "product" : data});
+        }
+    ).catch(
+        err =>{
+            res.json({ message: err.message });
+        }
+    )
+});
 
 // Update or edit Product
 router.get('/editProduct/:id', (req, res) => {
     let id = req.params.id;
     Product.findById(id, (err, product) =>{
         if(err){
-            res.redirect('/productList');
+            res.redirect('/productsList');
         } else{
             if (product == null){
-                res.redirect('/productList');
+                res.redirect('/productsList');
             } else{
                 res.render('edit_product', { title: "Edit Product Page", product: product});
             }
@@ -114,7 +127,7 @@ router.post('/update2/:id', (req, res)=> {
                 type : "success",
                 message : "Product Updated Successfully!!!",
             };
-            res.redirect('/productList');
+            res.redirect('/productsList');
         }
     });
 });
@@ -130,7 +143,7 @@ router.get('/deleteProduct/:id', (req, res) =>{
                 type : "info",
                 message : "Product Deleted Successfully!!!",
             };
-            res.redirect('/productList');
+            res.redirect('/productsList');
         }
     });
 });

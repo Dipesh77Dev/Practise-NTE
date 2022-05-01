@@ -48,6 +48,7 @@ require('./models/product.js');
 require('./models/category.js');
 
 // route prefix or calling routes
+
 app.use("", require("./routes/userRoutes.js"));
 app.use("", require("./routes/categoryRoutes.js"));
 app.use("", require("./routes/productRoutes.js"));
