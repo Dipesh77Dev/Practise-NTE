@@ -18,17 +18,20 @@ router.post("/addProduct", (req, res) => {
         prodDescription : req.body.prodDescription,
         category : req.body.category,
     });
-    // product.save((err) => {
-    //     if(err){
-    //         res.json({message : err.message, type: 'danger'});
-    //     } else {
-    //         req.session.message = {
-    //             type: 'success',
-    //             message: 'Product added successfully!!!',
-    //         };
-    //         res.redirect('/productList');
-    //     }
-    // });
+    /*
+    product.save((err) => {
+        if(err){
+            res.json({message : err.message, type: 'danger'});
+        } else {
+            req.session.message = {
+                type: 'success',
+                message: 'Product added successfully!!!',
+            };
+            res.redirect('/productList');
+        }
+    });
+    */
+   
     product.save(product).then(
         data => {
             res.send(data);
@@ -76,7 +79,8 @@ router.get("/productList", async(req, res) => {
         path: 'category',
         select: ['catName', 'catDescription'],
     });
-    res.render('product_list', { title: 'Product List', "product" : product});
+    // res.send(product);
+    res.render('products_list', { title: 'Product List', "products" : product});
 }
 catch(error){
     console.log(error);
@@ -155,27 +159,6 @@ router.get('/',(req, res) =>{
 module.exports = router;
 
 /*
-router.get("/prodCat", async (req, res) => {
-    try{
-        // pagination
-        const {page = 1, limit = 5} = req.query;
-        const product = await Product.find().limit(limit * 1).skip((page-1) * limit).populate({
-            path: "category",
-            select: [
-                'catName',
-                'catDescription'
-            ],
-        });
-        res.send(product);
-        res.render('prod_cat', { title: 'Product Page by Category' , product: product });
-    }
-    catch(err){
-        res.status(500).send(err)
-    };
-});
-*/
-
-/*
 router.get("/prodCat", (req, res) => {
     const {page = 1, limit = 5} = req.query;
     Product.find().limit(limit * 1).skip((page-1) * limit).populate({
@@ -195,6 +178,3 @@ router.get("/prodCat", (req, res) => {
 */
 
 // module.exports = router(); 
-
-
-// https://github.com/Automattic/mongoose/issues/7432

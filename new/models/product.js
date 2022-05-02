@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 // const { ObjectId } = mongoose.Schema.Types;
+
 const productSchema = new Schema({
     prodName : {
         type : String,
@@ -13,13 +14,13 @@ const productSchema = new Schema({
         type : String,
     },
     category: {
-        type : Schema.Types.ObjectId, 
+        type : mongoose.Schema.Types.ObjectId, 
         ref : "category",
-        // required : true,
+        required : true,
     },
 });
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product", productSchema, 'product');
 
 
 /*
