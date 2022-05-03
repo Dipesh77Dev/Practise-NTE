@@ -4,7 +4,6 @@ const router = express.Router();
 const Product = require('../models/product.js');
 // const { ObjectId } = require('mongodb'); 
 
-
 // Getting addProduct Form
 router.get("/addProduct", (req, res) => {
     res.render('add_product', { title: 'Add Product Form' }); 
@@ -152,7 +151,7 @@ router.get('/deleteProduct/:id', (req, res) =>{
     });
 });
 
-router.get('/',(req, res) =>{
+router.get('/', (req, res) =>{
     res.render('home', {title: 'Home Page'});
 });
 

@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const userServices = require("../services/users.services.js");
+const auth = require("../middlewares/auth.js");
 
 exports.register = (req, res, next) => {
   const { password } = req.body;
@@ -34,5 +35,10 @@ exports.login = (req, res, next) => {
 
 exports.userProfile = (req, res, next) => {
   return res.status(401).json({ message: "Authorized User!!" });
-  res.redirect('/');
+  // res.redirect('/');
 };
+
+exports.home = ( auth, (req, res, next) =>{
+  return res.status(401).json({ message: "Authorized User, Now we can access our Home Page!!" });
+  //  res.render('home', {title: 'Home Page'});
+});
