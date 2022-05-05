@@ -2,15 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Product = require('../models/product.js');
+const { requireAuth } = require('../middlewares/authMiddleware.js');
 // const { ObjectId } = require('mongodb'); 
 
 // Getting addProduct Form
-router.get("/addProduct", (req, res) => {
+router.get("/addProduct", requireAuth, (req, res) => {
     res.render('add_product', { title: 'Add Product Form' }); 
 });
 
 // insert Product 
-router.post("/addProduct", (req, res) => {
+router.post("/addProduct", requireAuth, (req, res) => {
     const product = new Product({
         prodName : req.body.prodName,
         prodPrice : req.body.prodPrice,
@@ -69,7 +70,7 @@ router.get("/productList", (req, res) => {
 });
 */
 
-router.get("/productList", async(req, res) => {
+router.get("/productList", requireAuth, async(req, res) => {
     try{
     const {page = 1, limit = 5} = req.query;
     const product = await Product.find()
@@ -86,7 +87,7 @@ catch(error){
 }
 });
 
-router.get('/productsList', (req, res) => {
+router.get('/productsList', requireAuth, (req, res) => {
     Product.find().then(
         data => {
             res.render('product_list', { title: 'All products List', "product" : data});
@@ -99,7 +100,7 @@ router.get('/productsList', (req, res) => {
 });
 
 // Update or edit Product
-router.get('/editProduct/:id', (req, res) => {
+router.get('/editProduct/:id', requireAuth, (req, res) => {
     let id = req.params.id;
     Product.findById(id, (err, product) =>{
         if(err){
@@ -115,7 +116,7 @@ router.get('/editProduct/:id', (req, res) => {
 });
 
 // Update product by post
-router.post('/update2/:id', (req, res)=> {
+router.post('/update2/:id', requireAuth, (req, res)=> {
     let id = req.params.id;
     Product.findByIdAndUpdate( id, { 
         prodName : req.body.prodName, 
@@ -136,7 +137,7 @@ router.post('/update2/:id', (req, res)=> {
 });
 
 // Delete Product Route
-router.get('/deleteProduct/:id', (req, res) =>{
+router.get('/deleteProduct/:id', requireAuth, (req, res) =>{
     let id = req.params.id;
     Product.findByIdAndRemove(id, (err, result) => {
         if(err){
@@ -151,9 +152,9 @@ router.get('/deleteProduct/:id', (req, res) =>{
     });
 });
 
-router.get('/', (req, res) =>{
-    res.render('home', {title: 'Home Page'});
-});
+// router.get('/', (req, res) =>{
+//     res.render('home', {title: 'Home Page'});
+// });
 
 module.exports = router;
 

@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../models/category.js');
+const { requireAuth } = require('../middlewares/authMiddleware.js');
 
 // Getting addCategory Form
-router.get("/addCategory", (req, res) => {
+router.get("/addCategory", requireAuth, (req, res) => {
     res.render('add_category', { title: 'Add Category FORM' }); // taking variable from ejs file
 });
 
 // insert Category 
-router.post("/addCategory", (req, res) => {
+router.post("/addCategory", requireAuth, (req, res) => {
     const category = new Category({
         catName : req.body.catName,
         catDescription : req.body.catDescription,
@@ -27,7 +28,7 @@ router.post("/addCategory", (req, res) => {
 });
 
 // Get Category List
-router.get("/categoryList", (req, res) => {
+router.get("/categoryList", requireAuth, (req, res) => {
     Category.find().exec((err, category) => {
         if(err){
             res.json({ message: err.message });
@@ -38,7 +39,7 @@ router.get("/categoryList", (req, res) => {
 });
 
 // Update or edit Category
-router.get('/editCategory/:id', (req, res) => {
+router.get('/editCategory/:id', requireAuth, (req, res) => {
     let id = req.params.id;
     Category.findById(id, (err, category) =>{
         if(err){
@@ -54,7 +55,7 @@ router.get('/editCategory/:id', (req, res) => {
 });
 
 // Update category by post
-router.post('/update1/:id', (req, res)=> {
+router.post('/update1/:id', requireAuth, (req, res)=> {
     let id = req.params.id;
     Category.findByIdAndUpdate( id, { 
         catName : req.body.catName, 
@@ -73,7 +74,7 @@ router.post('/update1/:id', (req, res)=> {
 });
 
 // Delete Category Route
-router.get('/deleteCategory/:id', (req, res) =>{
+router.get('/deleteCategory/:id', requireAuth, (req, res) =>{
     let id = req.params.id;
     Category.findByIdAndRemove(id, (err, result) => {
         if(err){

@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users.js');
+const { requireAuth } = require('../middlewares/authMiddleware.js');
 
-router.get("/users", (req, res) => {
+router.get("/users", requireAuth, (req, res) => {
     res.send("ALL USERS!!!");
 });
 
 // Getting addUser Form
-router.get("/addUser", (req, res) => {
+router.get("/addUser", requireAuth, (req, res) => {
     res.render('add_users', { title: 'Add Users' }); // taking variable from ejs file
 });
 
 // insert User 
-router.post("/addUser", (req, res) => {
+router.post("/addUser", requireAuth, (req, res) => {
     const user = new User({
         name : req.body.name,
         email : req.body.email,
@@ -34,7 +35,7 @@ router.post("/addUser", (req, res) => {
 });
 
 // Get User
-router.get("/userList", (req, res) => {
+router.get("/userList", requireAuth, (req, res) => {
     // res.send("HOME PAGE!!!");
     // res.render('index', { title: 'Home Page' }); 
     User.find().exec((err, users) => {
@@ -47,7 +48,7 @@ router.get("/userList", (req, res) => {
 });
 
 // Update or edit user
-router.get('/editUser/:id', (req, res) => {
+router.get('/editUser/:id', requireAuth, (req, res) => {
     let id = req.params.id;
     User.findById(id, (err, user) =>{
         if(err){
@@ -63,7 +64,7 @@ router.get('/editUser/:id', (req, res) => {
 });
 
 // Update users
-router.post('/update/:id', (req, res)=> {
+router.post('/update/:id', requireAuth, (req, res)=> {
     let id = req.params.id;
     User.findByIdAndUpdate( id, { 
         name : req.body.name, 
@@ -85,7 +86,7 @@ router.post('/update/:id', (req, res)=> {
 });
 
 // Delete User Route
-router.get('/deleteUser/:id', (req, res) =>{
+router.get('/deleteUser/:id', requireAuth, (req, res) =>{
     let id = req.params.id;
     User.findByIdAndRemove(id, (err, result) => {
         if(err){

@@ -38,7 +38,9 @@ exports.userProfile = (req, res, next) => {
   // res.redirect('/');
 };
 
+/*
 exports.home = ( auth, (req, res, next) =>{
   return res.status(401).json({ message: "Authorized User, Now we can access our Home Page!!" });
   //  res.render('home', {title: 'Home Page'});
 });
+*/
