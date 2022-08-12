@@ -1,0 +1,33 @@
+P1 => Understanding Project - 
+
+Frontend — In the frontend side, we would be using React as the frontend library. We would use Redux for state management. We would use React Bootstrap library for basic designing of the interface.
+Backend — For the backend side, we would be using the Express library on top of Nodejs. We would use MongoDB as the NoSQL database to store our data as documents in JSON format. We would use mongoose to connect to our MongoDB database.
+We would create REST APIs with Express and use these endpoints in the React frontend to interact with our backend part.
+
+bcrypt — We will be authenticating users in our application. We would need to store the password of our users in our database. So, it is never recommended to store plain text passwords since they can be compromised easily. So, we use bcrypt library to hash the passwords before we save them. We would delve into more detail into how it works when we actually use it.
+concurrently — This package helps us to run two processes at the same thus we would be able to run both our server and client at the same time without having to use two separate terminals to do so.
+config — This is a simple package which helps us to store our important data like secret keys, database ID etc. in a separate JSON file and it allows us to access it easily within any file.
+express — This is the library which we would use on top of Node to build our REST APIs.
+jsonwebtoken — This helps us to create JWTs for the authentication purpose.
+mongoose — This helps us to establish a connection between MongoDB and our Express app.
+validator — It helps us to validate a few things such as emails. It is a small package and is useful for validation.
+nodemon — It helps us to keep our server running and lets us rerun the server as soon as any changes are detected as we do not need to restart the server for changes to take place.
+
+We have added a few scripts too to make it easier for us to run the server and client -
+start — It uses node to run the server.js file. It would need to restart for updates.
+server — It uses nodemon to run the server.js file which allows it to update changes and restart the server automatically.
+client — Running this command runs the client. We use a prefix to let it know that we want to first move into client folder and then run the command.
+dev — It uses concurrently to run both the server and client at the same time.
+
+P2 => We will build models for our application. So we use Moongoose to connect to the MongoDb database.
+We do not need to give a unique id parameter to our schemas since MongoDB automatically provides a unique ID once we save any document in it.
+
+User Model - it would store the data of the users.
+Product Model - To see the products details, price, etc.
+Category Model - To see categories.
+Cart Model - To store the cart of any user.
+Order Model - For ordering the products.
+
+We will not be storing passwords in plain text format since it can be easily available if someone use our database, so its better for security, we use bcrypt library to hash our passwords and then save the hashed password in the database.
+
+link - https://javascript.plainenglish.io/lets-build-a-mern-stack-e-commerce-web-app-accb4c14ce71

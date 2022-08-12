@@ -1,0 +1,6 @@
+{
+    "dbURI" : "CRUD",
+    "jwtsecret" : "Raj",
+    "StripeAPIKey" : "Secret_Key"
+}
+

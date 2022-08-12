@@ -1,0 +1,95 @@
+Models - required : [true, 'Message'] - 1st is the value that is we req so kept as true. 2nd is the value of error message i.e if we failed the 1st value we can trigger the error message.
+{ isEmail } - function coming from validator packages, validate : [isEmail, 'err mssge'].
+
+1. Bcrypt => A library to help you hash passwords.
+Use - 
+const bcrypt = require('bcrypt'); - To use bcrypt, we must include the module.
+const saltRounds = 10; - Next, we set the saltRounds value. The higher the saltRounds value, the more time the hashing algorithm takes. You want to select a number that is high enough to prevent attacks, but not slower than potential user patience. In this example, we use the default value, 10.
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
+
+//You can also salt and hash synchronously or asynchronously.The recommendation is to do so asynchronously, so that is the method
+genSalt function - used to generate a salt.
+
+We pass bcrypt.genSalt() these parameters:
+saltRounds
+Callback of error and the returned salt:
+
+To hash a password:
+Technique 1 (generate a salt and hash on separate function calls):
+bcrypt.genSalt(saltRounds, function(err, salt) {
+    bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
+        // Store hash in your password DB.
+    });
+});
+
+Technique 2 (auto-gen a salt and hash):
+bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+    // Store hash in your password DB.
+});
+
+To check a password:
+// Load hash from your password DB.
+bcrypt.compare(myPlaintextPassword, hash, function(err, result) {
+    // result == true
+});
+bcrypt.compare(someOtherPlaintextPassword, hash, function(err, result) {
+    // result == false
+});
+
+with promises -
+Async methods that accept a callback, return a Promise when callback is not specified if Promise support is available.
+bcrypt.hash(myPlaintextPassword, saltRounds).then(function(hash) {
+    // Store hash in your password DB.
+});
+// Load hash from your password DB.
+bcrypt.compare(myPlaintextPassword, hash).then(function(result) {
+    // result == true
+});
+bcrypt.compare(someOtherPlaintextPassword, hash).then(function(result) {
+    // result == false
+});
+
+This is also compatible with async/await -
+
+async function checkUser(username, password) {
+    //... fetch user from a db etc.
+    const match = await bcrypt.compare(password, user.passwordHash);
+    if(match) {
+        //login
+    }
+    //...
+}
+
+Sync =>
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
+To hash a password:
+Technique 1 (generate a salt and hash on separate function calls):
+
+const salt = bcrypt.genSaltSync(saltRounds);
+const hash = bcrypt.hashSync(myPlaintextPassword, salt);
+// Store hash in your password DB.
+Technique 2 (auto-gen a salt and hash):
+
+const hash = bcrypt.hashSync(myPlaintextPassword, saltRounds);
+// Store hash in your password DB.
+As with async, both techniques achieve the same end-result.
+
+To check a password:
+// Load hash from your password DB.
+bcrypt.compareSync(myPlaintextPassword, hash); // true
+bcrypt.compareSync(someOtherPlaintextPassword, hash); // false
+________________________________________________
+2. cookie-parser =>
+
+________________________________________________
+Hashing a password - 
+"Hashing" a password refers to taking a plain text password and putting it through a hash algorithm. The hash algorithm takes in a string of any size and outputs a fixed-length string. No matter the size of the original string (i.e., the plain text password), the output (the hash) is always the same length. Since the same process is always applied, the same input always yields the same output.
+Say the plain text password is Ralph$467. Every time you pass Ralph$467 into the hash algorithm, the returned hash is the same. If someone else's plain text password is jsu*^7skdl230H98, the length of its hash is the same as for Ralph$467.
+Because hash algorithms always produce the same result for a specific password, they are predictable. If you only hash the password, a hacker can figure out the original password. Hashing is not enough.
+
+Salting a password -
+A salt is a random string. By hashing a plain text password plus a salt, the hash algorithm’s output is no longer predictable. The same password will no longer yield the same hash. The salt gets automatically included with the hash, so you do not need to store it in a database.

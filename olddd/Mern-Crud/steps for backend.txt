@@ -1,0 +1,226 @@
+P1 =>
+Download & install Node in PC.
+S1] Create a new Folder, & type the following command in the terminal to start a new Node project there -
+npm init
+We can give npm init -y 
+
+It will create package.json - 
+We can add our Scripts & dependencies.
+
+package.json - 
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "An e-commerce app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+  },
+  "author": "Shubham",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "concurrently": "^5.3.0",
+    "config": "^3.3.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.11",
+    "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
+
+S2] Create a "server.js" file in the root directory - 
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const config = require('config');
+
+const app = express();
+app.use(express.json());
+
+// used in production to serve client files
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname,'client','build','index.html'));
+    });
+}
+
+// connecting to mongoDB and then running server on port 4000
+const dbURI = config.get('dbURI');
+const port = process.env.PORT || 4000;
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
+  .then((result) => app.listen(port))
+  .catch((err) => console.log(err));
+
+S3] Create a new folder "config" & give a filename "default.json" in config folder-
+{
+"dbURI" : "YOUR_DATABASE_URI"
+}
+________________________________________________________________________________________________________________________________
+
+P2 =>
+S1] We are building models for our application. We are using MongoDB as the database to store all our data. We will use Mongoose to connect to MongoDB.
+Create a new folder "models" in it make 5 files "user,product,category,cart,order".
+
+a] User.js -
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const { isEmail } = require('validator');
+
+const UserSchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: [true,'Please enter an email'],
+        unique: true,
+        lowercase: true,
+        validate: [isEmail, 'Please enter a valid email']
+    },
+    password: {
+        type: String,
+        required: [true, 'Please enter a valid password'],
+        minlength: [6, 'Minimum password length must be 6 characters']
+    },
+    register_date: {
+        type: Date,
+        default: Date.now
+    },
+    address : {
+        type  : String,
+    },
+    phone : {
+        type : Number,
+    }
+})
+
+module.exports = User = mongoose.model('user',UserSchema);
+
+b] Product.js -
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const ProductSchema = new Schema({
+    name : {
+        type : String,
+        required : true
+    },
+    description : {
+        type : String,
+        required : true
+    },
+    category :{
+        type : String,
+        required : true
+    },
+    price : {
+        type : Number,
+        required : true
+    },
+    date_added : {
+        type : Date,
+        default : Date.now
+    },
+}); 
+
+module.exports = Product = mongoose.model('product',ProductSchema);
+
+c] Category.js -
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const CategorySchema = new Schema({
+    catName : {
+        type : String,
+        required : true
+    },
+    catDescription : {
+        type : String,
+        required : true
+    },
+    catDate_added : {
+        type : Date,
+        default : Date.now
+    }
+}); 
+
+module.exports = Category = mongoose.model('category', CategorySchema);
+
+d] Cart.js -
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const CartSchema = new Schema({
+    userId: {
+        type: String,
+    },
+    items: [{
+        productId: {
+            type: String,
+        },
+        name: String,
+        quantity: {
+            type: Number,
+            required: true,
+            min: [1, 'Quantity can not be less then 1.'],
+            default: 1
+        },
+        price: Number
+    }],
+    bill: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+});
+
+module.exports = Cart = mongoose.model('cart',CartSchema);
+
+e] Order.js -
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const OrderSchema = new Schema({
+    userId: {
+        type: String,
+    },
+    items: [{
+        productId: {
+            type: String,
+        },
+        name: String,
+        quantity: {
+            type: Number,
+            required: true,
+            min: [1, 'Quantity can not be less then 1.']
+        },
+        price: Number
+    }],
+    bill: {
+        type: Number,
+        required: true
+    },
+    OrderDate_added: {
+        type: Date,
+        default: Date.now
+    }
+})
+
+module.exports = Order = mongoose.model('order',OrderSchema);
+________________________________________________________________________________________________________________________________
+
+P3 =>
+S1]  Build Backend part which handle the authentication & items in our web application by building out the APIs with the help of Express Router & we will also be defining a custom middleware function to check whether a user is authenticated or not.
+Create a folder name "routes" - contain all the routes we need for this project, 5 routes - auth, product, category, cart, order.
+Create a folder name "controller" - contain one each for each file or routes folder, 5 routes - authController, productController, categoryController, cartController, orderController. - We will put all the logic in the controller folder & not directly in the routes folder.
+
+After Routes(Continue).

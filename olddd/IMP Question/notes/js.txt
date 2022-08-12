@@ -1,0 +1,9 @@
+Js Intro -
+JavaScript is the world's most popular programming language.
+JavaScript is the programming language of the Web.
+JavaScript is easy to learn.
+
+What Js can do? -
+1. Change HTML Content - One of many JavaScript HTML methods is getElementById().
+Ex -
+document.getElementById("demo").innerHTML = "Hello JavaScript"; // ('demo').

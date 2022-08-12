@@ -1,0 +1,33 @@
+no.                      API                                                             Data
+
+Normal Page =>
+
+1]       http:localhost:3000/                                       =>                Welcome All!!!
+
+Category page =>
+
+1]      http:localhost:3000/category/displayCategory                =>           Display Category Data(Get Method)
+2]      http:localhost:3000/category/addCategory                    =>           Adding Category Data(Post Method)
+3]      http:localhost:3000/category/:id                            =>           Update Category Data(Put Method)
+4]      http:localhost:3000/category/:id                            =>           Delete Category Data(Delete Method)
+5]      http:localhost:3000/category/                               =>           Delete whole category data(Delete Method)
+
+Product page =>
+
+1]      http:localhost:3000/product/displayAllProduct               =>           Display Product Data(Get Method), Display All product(without pagination & populate).
+2]      http:localhost:3000/product/addProduct                      =>           Adding Product Data(Post Method)
+3]      http:localhost:3000/product/:id                             =>           Update Product Data(Put Method)
+4]      http:localhost:3000/product/:id                             =>           Delete Product Data(Delete Method)
+5]      http:localhost:3000/product/                                =>           Delete whole Product data(Delete Method)
+
+With pagination & populate product page =>
+
+1]      http:localhost:3000/product/displayProduct                  =>           Display Product Data(Get Method), Display only 5 products for page 1 bcoz we had set limit to 5.
+2]      http:localhost:3000/product/displayProduct?page=2           =>           Display Product page no.2
+
+We had limit till 5 so, We can give any limit like 1(only 1 product of that page), 2(only 2 product of that page), 3(only 3 product of that page),
+4(only 4 product of that page), 5(all product of that page)
+Pages are till 6, bcoz we had inserted only 28 records of products, so till page 5 => We had 5 records of products-per page;
+On page 6, we had only 3 records.
+
+auth refer link - https://github.com/Olanetsoft/jwt-project
